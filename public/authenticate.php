@@ -12,14 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
-        $_SESSION['is_admin'] = $user['is_admin'];
         header("Location: dashboard.php");
         exit();
     } else {
         echo "Invalid email or password.";
     }
-} else {
-    header("Location: login.php");
-    exit();
 }
 ?>

@@ -1,37 +1,55 @@
 <?php
-include __DIR__ . '/../includes/header.php';
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="../src/css/style.css">
-</head>
-<body>
-    <h1>Register</h1>
-    <form action="create_user.php" method="post" enctype="multipart/form-data">
-        <label for="name">Name:</label><br>
-        <input type="text" name="name" required><br>
+session_start();
+require '../config/database.php';
 
-        <label for="email">Email:</label><br>
-        <input type="email" name="email" required><br>
+// Diretório de uploads
+$photoUploadDir = '../uploads/user_photos/';
 
-        <label for="password">Password:</label><br>
-        <input type="password" name="password" required><br>
+// Verificar se o diretório existe; se não, tentar criá-lo
+if (!is_dir($photoUploadDir)) {
+    mkdir($photoUploadDir, 0755, true);
+}
 
-        <label for="description">Description:</label><br>
-        <textarea name="description"></textarea><br>
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verificar se todos os campos foram preenchidos e o upload da foto foi feito
+    if (isset($_POST['name'], $_POST['email'], $_POST['password']) && !empty($_FILES['photo']['name'])) {
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $description = $_POST['description'];
+        $photo = $_FILES['photo'];
 
-        <label for="photo">Photo:</label><br>
-        <input type="file" name="photo"><br><br>
+        // Verificar se o upload da foto foi realizado com sucesso
+        if ($photo['error'] === UPLOAD_ERR_OK) {
+            $photoName = basename($photo['name']);
+            $photoTmpName = $photo['tmp_name'];
+            $photoUploadPath = $photoUploadDir . $photoName;
 
-        <button type="submit" name="register">Register</button>
-    </form>
-    <p><a href="login.php">Login</a></p>
-</body>
-</html>
-<?php
-include __DIR__ . '/../includes/footer.php';
+            // Mover a foto para o diretório de uploads
+            if (move_uploaded_file($photoTmpName, $photoUploadPath)) {
+                try {
+                    // Preparar e executar a inserção no banco de dados
+                    $stmt = $pdo->prepare("INSERT INTO users (name, email, password, description, photo) VALUES (?, ?, ?, ?, ?)");
+                    $stmt->execute([$name, $email, $password, $description, $photoName]);
+
+                    // Redirecionar após o sucesso
+                    header("Location: login.php");
+                    exit();
+                } catch (PDOException $e) {
+                    die("Erro ao criar usuário: " . $e->getMessage());
+                }
+            } else {
+                echo "Falha ao mover a foto para o diretório de uploads.";
+            }
+        } else {
+            echo "Erro no upload da foto: " . $photo['error'];
+        }
+    } else {
+        echo "Todos os campos são obrigatórios.";
+    }
+} else {
+    // Redirecionar para a página de registro se não for um POST
+    header("Location: register.php");
+    exit();
+}
 ?>
