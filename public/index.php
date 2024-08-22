@@ -14,9 +14,9 @@ session_start();
 <body>
     <?php include 'navbar.php'; ?>
     <div class="container mt-5">
-        <h1>Welcome to the Application</h1>
+        <h1>Bem vindo à minha app de login</h1>
         <?php if (!isset($_SESSION['user_id'])): ?>
-            <p><a href="register.php">Register</a> | <a href="login.php">Login</a></p>
+            <p><a href="login.php">Entrar</a> |  <a href="register.php">Registrar</a></p>
         <?php else: ?>
             <p><a href="dashboard.php">Dashboard</a></p>
         <?php endif; ?>

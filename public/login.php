@@ -7,14 +7,14 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Entrar</title>
     <!-- Bootstrap CSS via CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <?php include 'navbar.php'; ?>
     <div class="container mt-5">
-        <h2>Login</h2>
+        <h2>Entrar</h2>
         <form action="authenticate.php" method="post">
             <div class="mb-3">
                 <label for="email" class="form-label">Email:</label>
@@ -22,7 +22,7 @@ session_start();
             </div>
             
             <div class="mb-3">
-                <label for="password" class="form-label">Password:</label>
+                <label for="password" class="form-label">Senha:</label>
                 <input type="password" class="form-control" name="password" required>
             </div>
             
