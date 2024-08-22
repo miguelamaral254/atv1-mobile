@@ -25,15 +25,16 @@ $user = $stmt->fetch();
 <body>
     <?php include 'navbar.php'; ?>
     <div class="container mt-5">
-        <h2>Welcome, <?= htmlspecialchars($user['name']) ?></h2>
-        <h3>Your Information</h3>
-        <?php if ($user['photo']): ?>
-            <img src="../uploads/user_photos/<?= htmlspecialchars($user['photo']) ?>" alt="Photo" class="img-fluid" width="100">
-        <?php endif; ?>
-        <p>Nome: <?= htmlspecialchars($user['name']) ?></p>
-        <p>Email: <?= htmlspecialchars($user['email']) ?></p>
-        <p>Description: <?= htmlspecialchars($user['description']) ?></p>
-        
+        <div class="d-flex flex-column align-items-center">
+            <h2 class="text-center">Bem vindo, <?= htmlspecialchars($user['name']) ?></h2>
+            <h3 class="text-center">Suas informações:</h3>
+            <?php if ($user['photo']): ?>
+                <img src="../uploads/user_photos/<?= htmlspecialchars($user['photo']) ?>" alt="Photo" class="img-fluid mb-3" style="max-width: 100px;">
+            <?php endif; ?>
+            <p class="text-center">Nome: <?= htmlspecialchars($user['name']) ?></p>
+            <p class="text-center">Email: <?= htmlspecialchars($user['email']) ?></p>
+            <p class="text-center">Descrição: <?= htmlspecialchars($user['description']) ?></p>
+        </div>
     </div>
     <!-- Bootstrap JS and dependencies via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
